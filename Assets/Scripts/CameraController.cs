@@ -23,7 +23,6 @@ public class CameraController : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log(FAV);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView , FAV,temp * Time.deltaTime);    
     }   
     private void HandleTranslation() 

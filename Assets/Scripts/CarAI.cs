@@ -73,6 +73,7 @@ public class CarAI : MonoBehaviour
     {
         zCoordinate = carController.zCoordinate;
         lane = carController.lane;
+        Debug.Log(lane);
         IsChangingStrip = carController.IsChangingStrip;
         carController.rigidBody.drag = rigidBody.drag;
     }

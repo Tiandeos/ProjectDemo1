@@ -99,6 +99,10 @@ public class CarController : MonoBehaviour
         speed = CalculateCarSpeed();
         zCoordinate = CalculateZCoordinate();
         UsingNitro();
+        if(transform.tag == "Player") 
+        {
+            DebugLog();
+        }
         
     }
     public void GetInput(float vertical,float horizontal) 
@@ -191,12 +195,26 @@ public class CarController : MonoBehaviour
             GearLevel--;
         }
     }
+    private void LaneCheck() 
+    {
+        if(transform.position.x > 0 && transform.position.x < 3.7f && !IsChangingStrip ) 
+        {  
+            lane = 0;
+        }
+        else if(transform.position.x > 3.7f && !IsChangingStrip) 
+        {
+            lane = 1;
+        }
+            
+
+    }
     private void HandleStripChange() 
     {
         //Derler ki aslında bu yazdığın kodun yapay zekadan farkı yoktur, onlara de ki elbet o şerit değişitirmenin ve yapay zekanın ayrımını yapabilir, o yazanların en iyisi en mükemmelidir.
         //PS : Cidden nedense burayı yazmak en zorlandığım yerdi.
         //PS2 : Evet yapay zekayı buna benzer bir mantıkta yapabilirim ama onun yerine yapay zekanın sadece düz gitmesini sağlayacağım ve buraya belli şartlarda girmesini :D
         //Not : Boncuk teşekkürler.
+        //LaneCheck();
         Vector3 destinedposition = new Vector3(lane * 4.5f,transform.position.y,transform.position.z),gopositon = (destinedposition - transform.position).normalized;
         if(lane == 0) 
         {
@@ -237,18 +255,14 @@ public class CarController : MonoBehaviour
         {
             timer = 0;
         }
-        Debug.Log("Changing strip in: " + timer);
         float maxrotate;
         maxrotate = MaxRotateFix();
-        //Debug.Log("Distancetotarget:" + distancetotarget);
         if(distancetotarget > reachedtargetdistance && IsChangingStrip) 
         {
-            //Debug.Log("a");
             if(angledir > 0) 
             {
                 if(transform.rotation.y < maxrotate) 
                 {
-                    //Debug.Log("b");
                     horizontalright = 0.75f;
                     if(distancetotarget < 0.75f) 
                     {
@@ -584,5 +598,21 @@ public class CarController : MonoBehaviour
     {
         zCoordinate = transform.position.z;
         return zCoordinate;
+    }
+    private void DebugLog() 
+    {
+        gameManager.LaneText.text = "Lane: " + lane;
+        gameManager.ChangingTimeText.text = "Changing Time: " + timer;
+        gameManager.SteerAngleText.text = "SteerAngle = " + currentsteerangle;
+        gameManager.IsChangingStripText.text = "IsChangingStrip = " + IsChangingStrip;
+        gameManager.OnTouchText.text = "OnTouch = " + OnTouch;
+        gameManager.HorizontalText.text = "Horizontal = " + horizontalright;
+        gameManager.NitroText.text = "Nitro = " + StockNitro;
+        gameManager.CanUseNitroText.text = "CanUseNitro = " + CanUseNitro;
+        gameManager.GearText.text = "Gear = " + GearLevel;
+        gameManager.MotorForceText.text = "MotorForce = " + motorForce;
+        gameManager.MinSpeedText.text = "MinSpeed = " + minspeed;
+        gameManager.MaxSpeedText.text = "MaxSpeed = " + maxspeed; 
+
     }
 }

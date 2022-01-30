@@ -5,6 +5,21 @@ using UnityEngine.UI;
 using TMPro;
 public class GameManager : MonoBehaviour
 {
+    #region DebugUI
+    public TextMeshProUGUI LaneText;
+    public TextMeshProUGUI ChangingTimeText;
+    public TextMeshProUGUI SteerAngleText;
+    public TextMeshProUGUI IsChangingStripText;
+    public TextMeshProUGUI OnTouchText;
+    public TextMeshProUGUI HorizontalText;
+    
+    public TextMeshProUGUI NitroText;
+    public TextMeshProUGUI CanUseNitroText;
+    public TextMeshProUGUI GearText;
+    public TextMeshProUGUI MotorForceText;
+    public TextMeshProUGUI MinSpeedText;
+    public TextMeshProUGUI MaxSpeedText;
+    #endregion
     [SerializeField] private CarController CarController;
     [SerializeField] private Text kph,gearnum;
     [SerializeField] private TextMeshProUGUI StartGameText;
