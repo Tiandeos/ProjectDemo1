@@ -34,7 +34,7 @@ public class CarController : MonoBehaviour
     [HideInInspector]public float minspeed;
     [HideInInspector]public float speed;
     [HideInInspector]public int GearLevel;
-    [HideInInspector]public int lane;
+    public int lane;
     float timer;
     #endregion
     public float topspeed;
@@ -42,6 +42,7 @@ public class CarController : MonoBehaviour
     [SerializeField]private float motorForce = 1000;
     [SerializeField]private float breakForce = 1000;
     [SerializeField]private float StockNitro = 500;
+    [SerializeField]private float Grip;
     [SerializeField]private int MaxGearLevel = 4;
     private float maxsteerangle;
     private bool engineLerp;
@@ -126,7 +127,8 @@ public class CarController : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.E) && GearLevel < 4 && speed > maxspeed - 5 && !IsChangingStrip) 
             {
-                ChangeGearLevel(true);   
+                ChangeGearLevel(true);
+                verticalright = 0;
                 gameManager.ChangeGear();
             }
             if(Input.GetKeyDown(KeyCode.A)) 
@@ -166,8 +168,7 @@ public class CarController : MonoBehaviour
             engineLerp = speed <= engineLerpValue ? false : true;
             if(speed > maxspeed + 50) 
             {
-                motorForce = 0;
-                verticalright = 0;
+                motorForce = 1;
             }
         }
     }
@@ -205,7 +206,6 @@ public class CarController : MonoBehaviour
         {
             lane = 1;
         }
-            
 
     }
     private void HandleStripChange() 
@@ -214,16 +214,15 @@ public class CarController : MonoBehaviour
         //PS : Cidden nedense burayı yazmak en zorlandığım yerdi.
         //PS2 : Evet yapay zekayı buna benzer bir mantıkta yapabilirim ama onun yerine yapay zekanın sadece düz gitmesini sağlayacağım ve buraya belli şartlarda girmesini :D
         //Not : Boncuk teşekkürler.
-        //LaneCheck();
+        LaneCheck();
         Vector3 destinedposition = new Vector3(lane * 4.5f,transform.position.y,transform.position.z),gopositon = (destinedposition - transform.position).normalized;
         if(lane == 0) 
         {
             destinedposition = new Vector3(0.5f,transform.position.y,transform.position.z);
         }
         float distancetotarget = Vector3.Distance(transform.position,destinedposition);
-        float reachedtargetdistance =  0.41f;
+        float reachedtargetdistance =  1f;
         float angledir = Vector3.SignedAngle(transform.forward,gopositon,Vector3.up);
-        DistanceFix(distancetotarget);
         if(transform.position.x != distancetotarget - reachedtargetdistance && IsCarStoppedTouching && transform.tag != "Player") 
         {
             if(lane == 0) 
@@ -231,20 +230,20 @@ public class CarController : MonoBehaviour
                 lane++;
                 IsChangingStrip = true;
                 IsCarStoppedTouching = false;
-                ResetVelocity(false);
+                //ResetVelocity(false);
             }
             else if(lane == 1) 
             {
                 lane--;
                 IsChangingStrip = true;
                 IsCarStoppedTouching = false;
-                ResetVelocity(false);
+                //ResetVelocity(false);
             }
         }
         if(!IsCarTouching) 
         {
             LockPosition(IsChangingStrip);
-            LockRotation(IsChangingStrip);
+            //LockRotation(IsChangingStrip);
         }
         SteerFix();
         if(IsChangingStrip) 
@@ -263,7 +262,7 @@ public class CarController : MonoBehaviour
             {
                 if(transform.rotation.y < maxrotate) 
                 {
-                    horizontalright = 0.75f;
+                    horizontalright = 0.6f;
                     if(distancetotarget < 0.75f) 
                     {
                         horizontalright = 0;
@@ -281,7 +280,7 @@ public class CarController : MonoBehaviour
                 if(transform.rotation.y > -maxrotate) 
                 {
                     //Debug.Log("c");
-                    horizontalright = -0.75f;
+                    horizontalright = -0.6f;
                 }
                 else 
                 {
@@ -292,15 +291,15 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            if(transform.rotation.y > 0.003 ) 
+            if(transform.rotation.y > 0.001 ) 
             {
                 //Debug.Log("e");
-                horizontalright = -0.25f;
+                horizontalright = -0.32f;
             }
-            else if(transform.rotation.y < -0.003) 
+            else if(transform.rotation.y < -0.001) 
             {
                 //Debug.Log("f");
-                horizontalright = 0.25f;
+                horizontalright = 0.32f;
             }
             else if(transform.rotation.y == 0)
             {
@@ -310,21 +309,12 @@ public class CarController : MonoBehaviour
            
             //Eulerangles 0 dan 360 ya kadar çalşır. Sola döndüğünde 359 dan başlar. Sağa döndüğünde 0 dan
             //Eğer değiştirirseniz yine test etmeyi unutmayın
-            if(transform.eulerAngles.y >= 0 && transform.eulerAngles.y < 2) 
+            if(transform.eulerAngles.y >= 0 && transform.eulerAngles.y < 0.05) 
             {
                 IsChangingStrip = false;
             }
         }
-        if(distancetotarget < reachedtargetdistance) 
-        {
-            LockPosition(false);
-        }
-        
-    }
-    private void DistanceFix(float distancetotarget) 
-    {
-
-    }
+    }   
     private void ResetVelocity(bool ResetNonAngularVelocity) 
     {
         rigidBody.angularVelocity = Vector3.zero;
@@ -337,55 +327,55 @@ public class CarController : MonoBehaviour
     {
         //Maxsteerangle tekerliğin dönüşünü ayarlıyor eğer fazla olursa araba fazla kayıyor ve bu da yeniden tracke girmeyi denemesine neden oluyor.
         //Eğer bir nedenden dolayı burayı artırmak istersen maxrotationu da buraya göre ayarlaman gerekiyor. Eğer azaltırsan max rotationu artır artırırsan max rotationu azalt. Test etmeyi unutma farklı bir çözüm yok.
-        /*if(speed > 0 && speed < 32 ) 
+        if(speed > 0 && speed < 32 ) 
         {
-            maxsteerangle = 30.25f;
+            maxsteerangle = 25.25f;
         }
         else if(speed > 32 && speed < 45 ) 
         {
-            maxsteerangle = 20.05f;
+            maxsteerangle = 18.05f;
         }
         else if (speed > 45 && speed < 65) 
         {
-            maxsteerangle = 18.95f;
+            maxsteerangle = 16.95f;
         }
         else if(speed > 65 && speed < 100) 
         {
-            maxsteerangle = 15.25f;
+            maxsteerangle = 14.25f;
         }
         else if(speed > 100 && speed  < 110) 
         {
-            maxsteerangle = 13.05f;
+            maxsteerangle = 11.05f;
         }
         else if(speed > 110 && speed < 130) 
         {
-            maxsteerangle = 11.35f;
+            maxsteerangle = 9.35f;
         }
         else if(speed > 130 && speed < 150) 
         {
-            maxsteerangle = 10.15f;
+            maxsteerangle = 8.15f;
         }
         else if(speed > 150 && speed < 180) 
         {
-            maxsteerangle = 8.90f;
+            maxsteerangle = 7.90f;
         }
         else if(speed > 180 && speed < 220) 
         {
-            maxsteerangle = 8.55f;
+            maxsteerangle = 6.55f;
         }
         else if(speed > 220 && speed < 250) 
         {
-            maxsteerangle = 7.55f;
+            maxsteerangle = 6.25f;
         }
         else if(speed > 250 && speed < 280) 
         {
-            maxsteerangle = 7.10f;
+            maxsteerangle = 5.95f;
         }
         else 
         {
-            maxsteerangle = 6.5f;
-        }*/
-        maxsteerangle = 30;
+            maxsteerangle = 5.75f;
+        }
+        //maxsteerangle = 30;
     }
     private float MaxRotateFix() 
     {
@@ -458,7 +448,6 @@ public class CarController : MonoBehaviour
         {
             rigidBody.constraints = RigidbodyConstraints.None;
             rigidBody.constraints = RigidbodyConstraints.FreezeRotationX;
-            rigidBody.constraints = RigidbodyConstraints.FreezeRotationZ;
         }
     }
     public void LockRotation(bool IsLocking) 
@@ -479,7 +468,7 @@ public class CarController : MonoBehaviour
         wheel[1].steerAngle = currentsteerangle;
         if(transform.eulerAngles.y < 5 && transform.eulerAngles.y > -5 && !IsChangingStrip) 
         {
-            transform.rotation = new Quaternion(0,0,0,transform.rotation.w);
+            transform.rotation = new Quaternion(transform.rotation.x,0,0,transform.rotation.w);
         }
     }
     private void HandleMotor() 

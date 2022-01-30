@@ -21,16 +21,18 @@ public class ColliderScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag != "Player" && transform.tag != "Player") {
-            if(carAI.side == "right" && !carController.IsChangingStrip) 
+            carController.IsChangingStrip= true;    
+            Debug.Log("Change ?");
+            Debug.Log(carAI.lane);
+            if(carAI.lane == 1 && !carController.IsChangingStrip) 
             {
                 if(transform.tag == "Opponent")
                 { 
                     carAI.side = "left";
-                    carController.IsChangingStrip= true;
                     carController.ChangeLane(carAI.side);
                 }
             }
-            else if(carAI.side == "left" && !carController.IsChangingStrip) 
+            else if(carAI.lane == 0 && !carController.IsChangingStrip) 
             {
                 carAI.side = "right";
                 carController.IsChangingStrip = true;

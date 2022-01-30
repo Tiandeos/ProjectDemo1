@@ -24,7 +24,8 @@ public class CarAI : MonoBehaviour
     private void GetObjects() 
     {
         carController = GetComponent<CarController>();
-        lane = 1;   
+        lane = 1;
+        side = "right";
         rigidBody = GetComponent<Rigidbody>();
     }
     void Update()
