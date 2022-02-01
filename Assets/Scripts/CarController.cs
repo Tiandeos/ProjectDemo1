@@ -22,6 +22,7 @@ public class CarController : MonoBehaviour
     [HideInInspector]public bool IsUsingNitro = false;
     [HideInInspector]public bool IsFinishedUsingNitro = false;
     [HideInInspector]public bool OnTouch;
+    public int CarID;
     private bool IsCarLane;
     [HideInInspector]public float zCoordinate;
     private GameObject wheeltransforms;
@@ -41,13 +42,13 @@ public class CarController : MonoBehaviour
     public float[] gears;
     [SerializeField]private float motorForce = 1000;
     [SerializeField]private float breakForce = 1000;
-    [SerializeField]private float StockNitro = 500;
     [SerializeField]private float Grip;
     [SerializeField]private int MaxGearLevel = 4;
     private float maxsteerangle;
     private bool engineLerp;
     private float engineLerpValue;
     public GameManager gameManager;
+    private Upgrades upgrades;
     [SerializeField]private CarAI[] carAIScript;
     private string[] Upgrades;
 
@@ -86,6 +87,7 @@ public class CarController : MonoBehaviour
         {
             CanUseNitro = true;
         }
+        gears[MaxGearLevel] = maxspeed;
     }
     private void Update()
     {  
@@ -384,55 +386,59 @@ public class CarController : MonoBehaviour
         float maxrotate;
         if(speed > 0 && speed < 32) 
         {
-            maxrotate = 0.0871558f;
+            maxrotate = 0.0771558f;
         }
         else if(speed >= 32 && speed < 60) 
         {
-            maxrotate = 0.04011f;
+            maxrotate = 0.02911f;
         }
         else if(speed >= 60 && speed < 90) 
         {
-            maxrotate = 0.03621f;
+            maxrotate = 0.02721f;
         } 
         else if(speed >= 90 && speed < 130) 
         {
-            maxrotate = 0.0331f;
+            maxrotate = 0.0251f;
         }
         else if(speed >= 130 && speed < 150) 
         {
-            maxrotate = 0.0317f;
+            maxrotate = 0.0237f;
         }
         else if(speed >= 150 && speed < 180) 
         {
-            maxrotate = 0.0282f;
+            maxrotate = 0.0212f;
         }
         else if(speed >= 180 && speed < 220) 
         {
-            maxrotate = 0.0265f;
+            maxrotate = 0.0195f;
         }
         else if(speed >= 220 && speed < 270)
         {
-            maxrotate = 0.0235f;
+            maxrotate = 0.0175f;
         }
         else if(speed >= 270 && speed < 320) 
         {
-            maxrotate = 0.0205f;
+            maxrotate = 0.01555f;
         }
         else if(speed >= 320 && speed < 370) 
         {
-            maxrotate = 0.0195f;
+            maxrotate = 0.0135f;
         }
         else if(speed >= 370 && speed < 400) 
         {
-            maxrotate = 0.0175f;
+            maxrotate = 0.0125f;
         }
         else if(speed >= 400 && speed < 450) 
         {
-            maxrotate = 0.0155f;
+            maxrotate = 0.0105f;
+        }
+        else if(speed >= 450 && speed < 500) 
+        {
+            maxrotate = 0.0095f;
         }
         else 
         {
-            maxrotate = 0.0105f;
+            maxrotate = 0.0085f;
         }
         return maxrotate;
     }
@@ -533,16 +539,16 @@ public class CarController : MonoBehaviour
     {
         if(IsUsingNitro) 
         {
-            rigidBody.AddForce(transform.forward * 10000); 
-            StockNitro--;
+            rigidBody.AddForce(transform.forward * upgrades.boostForce);
+            upgrades.StockNitro--;
         }
-        if(StockNitro <= 0) 
+        if(upgrades.StockNitro <= 0) 
         {
             IsUsingNitro = false;
             CanUseNitro = false;
             IsFinishedUsingNitro = true;
         }
-        if(StockNitro > 0) 
+        if(upgrades.StockNitro > 0) 
         {
             if(speed > 75 && transform.tag == "Player")  
             {
@@ -596,7 +602,7 @@ public class CarController : MonoBehaviour
         gameManager.IsChangingStripText.text = "IsChangingStrip = " + IsChangingStrip;
         gameManager.OnTouchText.text = "OnTouch = " + OnTouch;
         gameManager.HorizontalText.text = "Horizontal = " + horizontalright;
-        gameManager.NitroText.text = "Nitro = " + StockNitro;
+        gameManager.NitroText.text = "Nitro = " + upgrades.StockNitro;
         gameManager.CanUseNitroText.text = "CanUseNitro = " + CanUseNitro;
         gameManager.GearText.text = "Gear = " + GearLevel;
         gameManager.MotorForceText.text = "MotorForce = " + motorForce;

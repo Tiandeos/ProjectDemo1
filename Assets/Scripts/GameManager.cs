@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI IsChangingStripText;
     public TextMeshProUGUI OnTouchText;
     public TextMeshProUGUI HorizontalText;
-    
     public TextMeshProUGUI NitroText;
     public TextMeshProUGUI CanUseNitroText;
     public TextMeshProUGUI GearText;
@@ -28,8 +27,13 @@ public class GameManager : MonoBehaviour
     public int MaxLane = 1;
     private float Timer;
     private string Winner;
+    public GameData gameData;
     private float startPosition = 220f,endPosition = -41f ,desiredPosition,minspeedang  = 190.0f, maxpeedang = -80.0f;
     [HideInInspector]public bool IsGameStarted;
+    private void Awake()
+    {
+        gameData = SaveSystem.Load();
+    }
     private void Start()
     {
         IsGameStarted = false;
