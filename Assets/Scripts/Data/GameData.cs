@@ -13,7 +13,9 @@ public class GameData
     public int[] AeroDynamicLevel;
     public int[] SuspansionLevel;
     public int[] TransmissionLevel;
+    public int[] EcuLevel;
     public bool isinfiniteunlocked;
+    public int ControlType;
     public int qualitysetting;//Oyunun ayarı filan kullanılır mı bilmiyorum
     public enum Language //Ulan ben bu videoyu izlediğim kişi niye yapmıyor diye düşünüyorum hala gdrkoısergkoersa
     {
@@ -24,6 +26,7 @@ public class GameData
     public GameData() 
     {
         totalmoney = 0;
+        ControlType = 0;
         levelunlocked = new bool[5];
         levelunlocked[0] = true;
         isinfiniteunlocked = false;
