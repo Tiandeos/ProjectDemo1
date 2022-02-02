@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    internal enum LaneChangeType //FreeLaneChange oyuncuya özgür bir şekilde şeriti değiştirebilmesini sağlıyor
+    public enum LaneChangeType //FreeLaneChange oyuncuya özgür bir şekilde şeriti değiştirebilmesini sağlıyor
     {
         StrictLaneChange,
         FreeLaneChange
     }
-    [SerializeField] private LaneChangeType laneChangeType;
+    public LaneChangeType laneChangeType;
     #region NotShowenOnEditor
     [HideInInspector] public Rigidbody rigidBody;
     private float verticalright,currentbreakforce,currentsteerangle,driftfactor;
@@ -51,6 +51,7 @@ public class CarController : MonoBehaviour
     public GameManager gameManager;
     private Upgrades upgrades;
     [SerializeField]private CarAI[] carAIScript;
+    private InputManager inputManager;
     private string[] Upgrades;
 
     //Todo :
@@ -75,6 +76,7 @@ public class CarController : MonoBehaviour
         wheelcolliders = transform.Find("WheelsCollider").gameObject;
         wheeltransforms = transform.Find("WheelsTransforms").gameObject;
         upgrades = GetComponent<Upgrades>();
+        inputManager = GetComponent<InputManager>();
         wheel = new WheelCollider[4];
         wheeltransform = new GameObject[4];
         wheel[0] = wheelcolliders.transform.Find("0").gameObject.GetComponent<WheelCollider>();
@@ -135,8 +137,9 @@ public class CarController : MonoBehaviour
         //Vitesi artırma kodu max vitesten fazlaysa vites atmıyor bu kodu yakında farklı bir yere yaz. 
         if(transform.tag == "Player") 
         {
-            if(Input.GetKeyDown(KeyCode.E) && GearLevel < 4 && speed > maxspeed - 5 && !IsChangingStrip) 
+            if(inputManager.GearUpgraded && GearLevel <= 3 && speed > maxspeed - 5 && !IsChangingStrip) 
             {
+                inputManager.GearUpgraded = false;
                 ChangeGearLevel(true);
                 verticalright = 0;
                 gameManager.ChangeGear();
@@ -406,39 +409,39 @@ public class CarController : MonoBehaviour
         float maxrotate;
         if(speed > 0 && speed < 32) 
         {
-            maxrotate = 0.0771558f;
+            maxrotate = 0.0671558f;
         }
         else if(speed >= 32 && speed < 60) 
         {
-            maxrotate = 0.02911f;
+            maxrotate = 0.02711f;
         }
         else if(speed >= 60 && speed < 90) 
         {
-            maxrotate = 0.02721f;
+            maxrotate = 0.02421f;
         } 
         else if(speed >= 90 && speed < 130) 
         {
-            maxrotate = 0.0251f;
+            maxrotate = 0.0211f;
         }
         else if(speed >= 130 && speed < 150) 
         {
-            maxrotate = 0.0237f;
+            maxrotate = 0.0207f;
         }
         else if(speed >= 150 && speed < 180) 
         {
-            maxrotate = 0.0212f;
+            maxrotate = 0.0195f;
         }
         else if(speed >= 180 && speed < 220) 
         {
-            maxrotate = 0.0195f;
+            maxrotate = 0.0175f;
         }
         else if(speed >= 220 && speed < 270)
         {
-            maxrotate = 0.0175f;
+            maxrotate = 0.0155f;
         }
         else if(speed >= 270 && speed < 320) 
         {
-            maxrotate = 0.01555f;
+            maxrotate = 0.01455f;
         }
         else if(speed >= 320 && speed < 370) 
         {
@@ -505,7 +508,7 @@ public class CarController : MonoBehaviour
         maxspeed = gears[GearLevel];
         if(GearLevel > 0) 
         {
-            minspeed = gears[GearLevel - 1];
+            minspeed = gears[GearLevel - 1] - 10;
         }
         #endregion
         for(int i = 0; i < wheel.Length; i++) 

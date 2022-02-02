@@ -37,6 +37,18 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         IsGameStarted = false;
+        GetPlayerData();
+    }
+    private void GetPlayerData() 
+    {
+        if(gameData.laneChangeType == GameData.LaneChangeType.StrictLaneChange) 
+        {
+            CarController.laneChangeType = CarController.LaneChangeType.StrictLaneChange;
+        }
+        else if(gameData.laneChangeType == GameData.LaneChangeType.FreeLaneChange) 
+        {
+            CarController.laneChangeType = CarController.LaneChangeType.FreeLaneChange;
+        }
     }
 
     private void Update()

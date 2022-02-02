@@ -58,10 +58,10 @@ public class ColliderScript : MonoBehaviour
                 }
             }
         }
-    }
-    private void OnTriggerExit(Collider other) 
-    {
-
+        if(other.tag == "Finish"  && transform.tag != "CheckTrigger") 
+        {
+            Debug.Log("Race Succesfully finished");
+        } 
     }
     private void OnCollisionEnter(Collision other) 
     {

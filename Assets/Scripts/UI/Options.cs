@@ -31,12 +31,14 @@ public class Options : MonoBehaviour
     #region ControlOptions
     public void OnClickEnterButtons() 
     {
-        gameData.ControlType = 0;
+        gameData.laneChangeType = GameData.LaneChangeType.StrictLaneChange;
+        gameData.isControlChanged = true;
         SaveSystem.Save(gameData);
     }
     public void OnClickEnterSteeringWheel() 
     {
-        gameData.ControlType = 1;
+        gameData.laneChangeType = GameData.LaneChangeType.FreeLaneChange;
+        gameData.isControlChanged = true;
         SaveSystem.Save(gameData);
     }
     #endregion

@@ -9,13 +9,19 @@ public class GameData
     public bool[] carunlocked;
     public int[] NitroLevel;
     public int[] EngineLevel;
+    public bool isControlChanged;
     public int[] TireLevel;
     public int[] AeroDynamicLevel;
     public int[] SuspansionLevel;
     public int[] TransmissionLevel;
     public int[] EcuLevel;
     public bool isinfiniteunlocked;
-    public int ControlType;
+    public enum LaneChangeType
+    {
+        StrictLaneChange,
+        FreeLaneChange
+    }
+    public LaneChangeType laneChangeType;
     public int qualitysetting;//Oyunun ayarı filan kullanılır mı bilmiyorum
     public enum Language //Ulan ben bu videoyu izlediğim kişi niye yapmıyor diye düşünüyorum hala gdrkoısergkoersa
     {
@@ -26,7 +32,6 @@ public class GameData
     public GameData() 
     {
         totalmoney = 0;
-        ControlType = 0;
         levelunlocked = new bool[5];
         levelunlocked[0] = true;
         isinfiniteunlocked = false;
@@ -37,13 +42,16 @@ public class GameData
         EngineLevel = new int[5];
         EngineLevel[0] = 0;
         TireLevel = new int[5];
+        isControlChanged = false;
         TireLevel[0] = 0;
         AeroDynamicLevel = new int[5];
         AeroDynamicLevel[0] = 0;
         SuspansionLevel = new int[5];
         SuspansionLevel[0] = 0;
         TransmissionLevel = new int[5];
-        TransmissionLevel[0] = 0; 
+        TransmissionLevel[0] = 0;
+        EcuLevel = new int[5]; 
+        EcuLevel[0] = 0;
         language = Language.English;
     }
 }
