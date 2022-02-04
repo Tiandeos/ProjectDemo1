@@ -251,13 +251,13 @@ public class CarController : MonoBehaviour
         //PS2 : Evet yapay zekayı buna benzer bir mantıkta yapabilirim ama onun yerine yapay zekanın sadece düz gitmesini sağlayacağım ve buraya belli şartlarda girmesini :D
         //Not : Boncuk teşekkürler.
         LaneCheck();
-        Vector3 destinedposition = new Vector3(lane * 5.5f,transform.position.y,transform.position.z),gopositon = (destinedposition - transform.position).normalized;
+        Vector3 destinedposition = new Vector3(lane * 5.45f,transform.position.y,transform.position.z),gopositon = (destinedposition - transform.position).normalized;
         if(lane == 0) 
         {
-            destinedposition = new Vector3(0.5f,transform.position.y,transform.position.z);
+            destinedposition = new Vector3(-0.74f,transform.position.y,transform.position.z);
         }
         float distancetotarget = Vector3.Distance(transform.position,destinedposition);
-        float reachedtargetdistance =  0.65f;
+        float reachedtargetdistance =  1f;
         float angledir = Vector3.SignedAngle(transform.forward,gopositon,Vector3.up);
         if(transform.position.x != distancetotarget - reachedtargetdistance && IsCarStoppedTouching && transform.tag != "Player") 
         {
@@ -295,7 +295,9 @@ public class CarController : MonoBehaviour
             {
                 if(transform.rotation.y < maxrotate) 
                 {
-                    horizontalright = 0.6f;
+                    //horizontalright = 0.6f;
+                    if(horizontalright < 0.32f)
+                        horizontalright += Time.deltaTime / 1.25f;
                     if(distancetotarget < 0.75f) 
                     {
                         horizontalright = 0;
@@ -313,7 +315,9 @@ public class CarController : MonoBehaviour
                 if(transform.rotation.y > -maxrotate) 
                 {
                     //Debug.Log("c");
-                    horizontalright = -0.6f;
+                    //horizontalright = -0.6f;
+                    if(horizontalright > -0.32f)
+                        horizontalright -= Time.deltaTime / 1.25f;
                 }
                 else 
                 {
@@ -324,15 +328,20 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            if(transform.rotation.y > 0.001 ) 
+            if(transform.rotation.y > 0.002 ) 
             {
+                
                 //Debug.Log("e");
-                horizontalright = -0.3f;
+                //horizontalright = -0.3f;
+                if(horizontalright > -0.15f)
+                    horizontalright -= Time.deltaTime / 0.5f;
             }
-            else if(transform.rotation.y < -0.001) 
+            else if(transform.rotation.y < -0.002) 
             {
                 //Debug.Log("f");
-                horizontalright = 0.3f;
+                if(horizontalright < 0.15f)
+                    horizontalright += Time.deltaTime / 0.5f;
+                //horizontalright = 0.3f;
             }
             else if(transform.rotation.y == 0)
             {
@@ -354,51 +363,51 @@ public class CarController : MonoBehaviour
         //Eğer bir nedenden dolayı burayı artırmak istersen maxrotationu da buraya göre ayarlaman gerekiyor. Eğer azaltırsan max rotationu artır artırırsan max rotationu azalt. Test etmeyi unutma farklı bir çözüm yok.
         if(speed > 0 && speed < 32 ) 
         {
-            maxsteerangle = 25f;
+            maxsteerangle = 22f;
         }
         else if(speed > 32 && speed < 45 ) 
         {
-            maxsteerangle = 18.05f;
+            maxsteerangle = 16.05f;
         }
         else if (speed > 45 && speed < 65) 
         {
-            maxsteerangle = 16.95f;
+            maxsteerangle = 14.95f;
         }
         else if(speed > 65 && speed < 100) 
         {
-            maxsteerangle = 14.25f;
+            maxsteerangle = 12.25f;
         }
         else if(speed > 100 && speed  < 110) 
         {
-            maxsteerangle = 11.05f;
+            maxsteerangle = 9.05f;
         }
         else if(speed > 110 && speed < 130) 
         {
-            maxsteerangle = 9.35f;
+            maxsteerangle = 8.35f;
         }
         else if(speed > 130 && speed < 150) 
         {
-            maxsteerangle = 8.15f;
+            maxsteerangle = 7.15f;
         }
         else if(speed > 150 && speed < 180) 
         {
-            maxsteerangle = 7.90f;
+            maxsteerangle = 6.90f;
         }
         else if(speed > 180 && speed < 220) 
         {
-            maxsteerangle = 6.55f;
+            maxsteerangle = 5.55f;
         }
         else if(speed > 220 && speed < 250) 
         {
-            maxsteerangle = 6.25f;
+            maxsteerangle = 4.25f;
         }
         else if(speed > 250 && speed < 280) 
         {
-            maxsteerangle = 5.95f;
+            maxsteerangle = 3.95f;
         }
         else 
         {
-            maxsteerangle = 5.75f;
+            maxsteerangle = 3.75f;
         }
         //maxsteerangle = 30;
     }
@@ -409,7 +418,7 @@ public class CarController : MonoBehaviour
         float maxrotate;
         if(speed > 0 && speed < 32) 
         {
-            maxrotate = 0.0571558f;
+            maxrotate = 0.0471558f;
         }
         else if(speed >= 32 && speed < 60) 
         {

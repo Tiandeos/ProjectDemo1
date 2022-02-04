@@ -50,12 +50,12 @@ public class Upgrades : MonoBehaviour
         if(NitroLevel != 0) 
         {
             boostForce = NitroLevel * 2500;
-            StockNitro = NitroLevel  * 200;
+            StockNitro = NitroLevel  * 250;
         }
         else 
         {
             boostForce = 1250;
-            StockNitro = 150;
+            StockNitro = 200;
         }
         if(EngineLevel != 0) 
         {
