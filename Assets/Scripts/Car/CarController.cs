@@ -251,13 +251,13 @@ public class CarController : MonoBehaviour
         //PS2 : Evet yapay zekayı buna benzer bir mantıkta yapabilirim ama onun yerine yapay zekanın sadece düz gitmesini sağlayacağım ve buraya belli şartlarda girmesini :D
         //Not : Boncuk teşekkürler.
         LaneCheck();
-        Vector3 destinedposition = new Vector3(lane * 4.5f,transform.position.y,transform.position.z),gopositon = (destinedposition - transform.position).normalized;
+        Vector3 destinedposition = new Vector3(lane * 5.5f,transform.position.y,transform.position.z),gopositon = (destinedposition - transform.position).normalized;
         if(lane == 0) 
         {
             destinedposition = new Vector3(0.5f,transform.position.y,transform.position.z);
         }
         float distancetotarget = Vector3.Distance(transform.position,destinedposition);
-        float reachedtargetdistance =  1f;
+        float reachedtargetdistance =  0.65f;
         float angledir = Vector3.SignedAngle(transform.forward,gopositon,Vector3.up);
         if(transform.position.x != distancetotarget - reachedtargetdistance && IsCarStoppedTouching && transform.tag != "Player") 
         {
@@ -327,12 +327,12 @@ public class CarController : MonoBehaviour
             if(transform.rotation.y > 0.001 ) 
             {
                 //Debug.Log("e");
-                horizontalright = -0.32f;
+                horizontalright = -0.3f;
             }
             else if(transform.rotation.y < -0.001) 
             {
                 //Debug.Log("f");
-                horizontalright = 0.32f;
+                horizontalright = 0.3f;
             }
             else if(transform.rotation.y == 0)
             {
@@ -354,7 +354,7 @@ public class CarController : MonoBehaviour
         //Eğer bir nedenden dolayı burayı artırmak istersen maxrotationu da buraya göre ayarlaman gerekiyor. Eğer azaltırsan max rotationu artır artırırsan max rotationu azalt. Test etmeyi unutma farklı bir çözüm yok.
         if(speed > 0 && speed < 32 ) 
         {
-            maxsteerangle = 25.25f;
+            maxsteerangle = 25f;
         }
         else if(speed > 32 && speed < 45 ) 
         {
@@ -409,59 +409,59 @@ public class CarController : MonoBehaviour
         float maxrotate;
         if(speed > 0 && speed < 32) 
         {
-            maxrotate = 0.0671558f;
+            maxrotate = 0.0571558f;
         }
         else if(speed >= 32 && speed < 60) 
         {
-            maxrotate = 0.02711f;
+            maxrotate = 0.02411f;
         }
         else if(speed >= 60 && speed < 90) 
         {
-            maxrotate = 0.02421f;
+            maxrotate = 0.02121f;
         } 
         else if(speed >= 90 && speed < 130) 
         {
-            maxrotate = 0.0211f;
+            maxrotate = 0.0191f;
         }
         else if(speed >= 130 && speed < 150) 
         {
-            maxrotate = 0.0207f;
+            maxrotate = 0.0177f;
         }
         else if(speed >= 150 && speed < 180) 
         {
-            maxrotate = 0.0195f;
+            maxrotate = 0.0165f;
         }
         else if(speed >= 180 && speed < 220) 
         {
-            maxrotate = 0.0175f;
+            maxrotate = 0.0145f;
         }
         else if(speed >= 220 && speed < 270)
         {
-            maxrotate = 0.0155f;
+            maxrotate = 0.0125f;
         }
         else if(speed >= 270 && speed < 320) 
         {
-            maxrotate = 0.01455f;
+            maxrotate = 0.01155f;
         }
         else if(speed >= 320 && speed < 370) 
         {
-            maxrotate = 0.0135f;
+            maxrotate = 0.0105f;
         }
         else if(speed >= 370 && speed < 400) 
         {
-            maxrotate = 0.0125f;
+            maxrotate = 0.0095f;
         }
         else if(speed >= 400 && speed < 450) 
         {
-            maxrotate = 0.0105f;
+            maxrotate = 0.0085f;
         }
         else if(speed >= 450 && speed < 500) 
         {
-            maxrotate = 0.0095f;
+            maxrotate = 0.0065f;
         }
         else 
         {
-            maxrotate = 0.0085f;
+            maxrotate = 0.0055f;
         }
         return maxrotate;
     }
