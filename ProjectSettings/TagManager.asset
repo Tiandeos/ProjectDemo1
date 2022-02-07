@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Opponent
   - CheckTrigger
+  - CreatedRoad
   layers:
   - Default
   - TransparentFX

@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
     private float Timer;
     private string Winner;
     public GameData gameData;
-    private float startPosition = 220f,endPosition = -41f ,desiredPosition,minspeedang  = 190.0f, maxpeedang = -80.0f;
+    private float startPosition = 220f,endPosition = -41f ,desiredPosition,minspeedang  = 190.0f;
+    private float maxpeedang = -80.0f;
     [HideInInspector]public bool IsGameStarted;
     private void Awake()
     {

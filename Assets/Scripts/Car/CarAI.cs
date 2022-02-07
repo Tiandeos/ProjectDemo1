@@ -49,11 +49,11 @@ public class CarAI : MonoBehaviour
         #region Break
         if(!IsBreaking) 
         {
-            vertical = 0.5f;
+            vertical = 1f;
         }
         else if(IsBreaking)
         {
-            vertical = -0.5f;
+            vertical = -1f;
         }
         #endregion
         

@@ -7,6 +7,9 @@ public class GameData
     public float totalmoney;//şimdilik dursun sadece
     public bool[] levelunlocked;
     public bool[] carunlocked;
+    public bool[] patternunlocked;
+    public bool[] colorunlockedforneedle;
+    public bool[] colurunlockedforsteer;
     public int[] NitroLevel;
     public int[] EngineLevel;
     public bool isControlChanged;
@@ -52,6 +55,9 @@ public class GameData
         TransmissionLevel[0] = 0;
         EcuLevel = new int[5]; 
         EcuLevel[0] = 0;
+        patternunlocked = new bool[999];
+        colorunlockedforneedle = new bool[999];
+        colurunlockedforsteer = new bool[999];
         language = Language.English;
     }
 }

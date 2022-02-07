@@ -297,7 +297,7 @@ public class CarController : MonoBehaviour
                 {
                     //horizontalright = 0.6f;
                     if(horizontalright < 0.32f)
-                        horizontalright += Time.deltaTime / 1.25f;
+                        horizontalright += Time.deltaTime / 1.15f;
                     if(distancetotarget < 0.75f) 
                     {
                         horizontalright = 0;
@@ -317,7 +317,7 @@ public class CarController : MonoBehaviour
                     //Debug.Log("c");
                     //horizontalright = -0.6f;
                     if(horizontalright > -0.32f)
-                        horizontalright -= Time.deltaTime / 1.25f;
+                        horizontalright -= Time.deltaTime / 1.15f;
                 }
                 else 
                 {
@@ -333,13 +333,13 @@ public class CarController : MonoBehaviour
                 
                 //Debug.Log("e");
                 //horizontalright = -0.3f;
-                if(horizontalright > -0.15f)
+                if(horizontalright > -0.25f)
                     horizontalright -= Time.deltaTime / 0.5f;
             }
             else if(transform.rotation.y < -0.002) 
             {
                 //Debug.Log("f");
-                if(horizontalright < 0.15f)
+                if(horizontalright < 0.25f)
                     horizontalright += Time.deltaTime / 0.5f;
                 //horizontalright = 0.3f;
             }
@@ -418,59 +418,59 @@ public class CarController : MonoBehaviour
         float maxrotate;
         if(speed > 0 && speed < 32) 
         {
-            maxrotate = 0.0471558f;
+            maxrotate = 0.064558f;
         }
         else if(speed >= 32 && speed < 60) 
         {
-            maxrotate = 0.02411f;
+            maxrotate = 0.03511f;
         }
         else if(speed >= 60 && speed < 90) 
         {
-            maxrotate = 0.02121f;
+            maxrotate = 0.0321f;
         } 
         else if(speed >= 90 && speed < 130) 
         {
-            maxrotate = 0.0191f;
+            maxrotate = 0.0271f;
         }
         else if(speed >= 130 && speed < 150) 
         {
-            maxrotate = 0.0177f;
+            maxrotate = 0.0257f;
         }
         else if(speed >= 150 && speed < 180) 
         {
-            maxrotate = 0.0165f;
+            maxrotate = 0.0235f;
         }
         else if(speed >= 180 && speed < 220) 
         {
-            maxrotate = 0.0145f;
+            maxrotate = 0.0215f;
         }
         else if(speed >= 220 && speed < 270)
         {
-            maxrotate = 0.0125f;
+            maxrotate = 0.0195f;
         }
         else if(speed >= 270 && speed < 320) 
         {
-            maxrotate = 0.01155f;
+            maxrotate = 0.01755f;
         }
         else if(speed >= 320 && speed < 370) 
         {
-            maxrotate = 0.0105f;
+            maxrotate = 0.0155f;
         }
         else if(speed >= 370 && speed < 400) 
         {
-            maxrotate = 0.0095f;
+            maxrotate = 0.0125f;
         }
         else if(speed >= 400 && speed < 450) 
         {
-            maxrotate = 0.0085f;
+            maxrotate = 0.0115f;
         }
         else if(speed >= 450 && speed < 500) 
         {
-            maxrotate = 0.0065f;
+            maxrotate = 0.0095f;
         }
         else 
         {
-            maxrotate = 0.0055f;
+            maxrotate = 0.0075f;
         }
         return maxrotate;
     }
@@ -478,7 +478,7 @@ public class CarController : MonoBehaviour
     {
         //Eğer şerit değiştirmiyorsa yana doğru hareketi engelliyor
         //Ve rotasyonu engelliyor.
-        if(!IsLocking) 
+        if(!IsLocking && laneChangeType == LaneChangeType.StrictLaneChange) 
         {
             rigidBody.constraints = RigidbodyConstraints.FreezePositionX;
         }
@@ -490,7 +490,7 @@ public class CarController : MonoBehaviour
     }
     public void LockRotation(bool IsLocking) 
     {
-        if(!IsLocking) 
+        if(!IsLocking && laneChangeType == LaneChangeType.StrictLaneChange) 
         {
             rigidBody.freezeRotation = true;
         }
