@@ -18,6 +18,9 @@ public class GameData
     public int[] SuspansionLevel;
     public int[] TransmissionLevel;
     public int[] EcuLevel;
+    public float[] topspeed;
+    public float[] motorforce;
+    public int[] maxgear;
     public bool isinfiniteunlocked;
     public enum LaneChangeType
     {
@@ -35,25 +38,25 @@ public class GameData
     public GameData() 
     {
         totalmoney = 0;
-        levelunlocked = new bool[5];
+        levelunlocked = new bool[999];
         levelunlocked[0] = true;
         isinfiniteunlocked = false;
-        carunlocked = new bool[5];
+        carunlocked = new bool[999];
         carunlocked[0] = true;
-        NitroLevel = new int[5];
+        NitroLevel = new int[999];
         NitroLevel[0] = 0;
-        EngineLevel = new int[5];
+        EngineLevel = new int[999];
         EngineLevel[0] = 0;
-        TireLevel = new int[5];
+        TireLevel = new int[999];
         isControlChanged = false;
         TireLevel[0] = 0;
-        AeroDynamicLevel = new int[5];
+        AeroDynamicLevel = new int[999];
         AeroDynamicLevel[0] = 0;
-        SuspansionLevel = new int[5];
+        SuspansionLevel = new int[999];
         SuspansionLevel[0] = 0;
-        TransmissionLevel = new int[5];
+        TransmissionLevel = new int[999];
         TransmissionLevel[0] = 0;
-        EcuLevel = new int[5]; 
+        EcuLevel = new int[999]; 
         EcuLevel[0] = 0;
         patternunlocked = new bool[999];
         colorunlockedforneedle = new bool[999];

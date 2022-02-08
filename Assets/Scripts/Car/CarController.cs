@@ -51,7 +51,7 @@ public class CarController : MonoBehaviour
     public GameManager gameManager;
     private Upgrades upgrades;
     [SerializeField]private CarAI[] carAIScript;
-    private InputManager inputManager;
+    [SerializeField]private InputManager inputManager;
     private string[] Upgrades;
 
     //Todo :
@@ -74,9 +74,8 @@ public class CarController : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody>();
         wheelcolliders = transform.Find("WheelsCollider").gameObject;
-        wheeltransforms = transform.Find("WheelsTransforms").gameObject;
+        wheeltransforms = transform.Find("WheelsTransform").gameObject;
         upgrades = GetComponent<Upgrades>();
-        inputManager = GetComponent<InputManager>();
         wheel = new WheelCollider[4];
         wheeltransform = new GameObject[4];
         wheel[0] = wheelcolliders.transform.Find("0").gameObject.GetComponent<WheelCollider>();
@@ -122,7 +121,22 @@ public class CarController : MonoBehaviour
     {
         if(transform.tag == "Player") 
         {
-            verticalright = Input.GetAxis("Vertical");
+            //Debug.Log(inputManager.UpPressed);
+            //verticalright = Input.GetAxis("Vertical");
+            if(inputManager.UpPressed) 
+            {
+                if(verticalright < 1)
+                {
+                    verticalright += Time.deltaTime;
+                }
+            }
+            if(inputManager.DownPressed) 
+            {
+                if(verticalright > -1)  
+                {
+                    verticalright -= Time.deltaTime;
+                }
+            }
         }
         else if(transform.tag == "Opponent")
         {
@@ -146,11 +160,11 @@ public class CarController : MonoBehaviour
             }
             if(laneChangeType == LaneChangeType.StrictLaneChange) 
             {
-                if(Input.GetKeyDown(KeyCode.A)) 
+                if(inputManager.LeftPressed) 
                 {
                     ChangeLane("left");
                 }
-                if(Input.GetKeyDown(KeyCode.D))
+                if(inputManager.RightPressed)
                 {
                     ChangeLane("right");
                 }
@@ -159,7 +173,18 @@ public class CarController : MonoBehaviour
             {
                 float maxrotate;
                 maxrotate = 0.03f;
-                horizontalright = Input.GetAxis("Horizontal");
+                //horizontalright = Input.GetAxis("Horizontal");
+                if(inputManager.RightPressed) 
+                {
+                    if(horizontalright < 1) 
+                    horizontalright += Time.deltaTime;
+                }
+                else if(inputManager.LeftPressed) 
+                {
+                    if(horizontalright > -1)
+                    horizontalright -= Time.deltaTime;
+                    
+                }
                 if(transform.rotation.y > 0 && horizontalright > 0) {
                     if(transform.rotation.y >= maxrotate) 
                     {

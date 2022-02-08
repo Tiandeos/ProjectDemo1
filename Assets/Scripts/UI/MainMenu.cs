@@ -14,4 +14,8 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Options",LoadSceneMode.Additive);
     } 
+    public void OnclickEnterInfiniteMode() 
+    {
+        SceneManager.LoadScene("InfiniteMode");
+    }
 }
