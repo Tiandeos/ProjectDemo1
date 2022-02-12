@@ -6,7 +6,7 @@ public class SpeedoMeter : MonoBehaviour
 {
     [SerializeField]private CarController carController;
     [SerializeField]private Transform needleTransform;
-    private float endPosition = -225;
+    private float endPosition = -150;
     private float startPosition = -40;
     private float desiredPosition;
     private float speed;

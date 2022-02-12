@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     [SerializeField]private Vector3 offset;
     public float temp = 10;
     [SerializeField]private Transform target;
-    [SerializeField]private float translateSpeed,rotationspeed;
+    [SerializeField]private float translateSpeed = 10000000,rotationspeed;
     [HideInInspector]public float FAV;
     [HideInInspector]public float StartFOV;
     private Camera camera;

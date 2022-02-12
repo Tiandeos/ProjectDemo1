@@ -6,6 +6,7 @@ public class ColliderScript : MonoBehaviour
 {
     private CarController carController;
     private CarAI carAI;
+    [SerializeField] private GameObject RetryPanel;
     private void Start()
     {
         GetObjects();
@@ -69,6 +70,14 @@ public class ColliderScript : MonoBehaviour
         {
             carController.IsCarTouching = true;
             carController.LockPosition(carController.IsCarTouching);
+        }
+        if(other.gameObject.tag == "Obstacle" && transform.tag == "Player") 
+        {
+            RetryPanel.SetActive(true);
+        }
+        if(other.gameObject.tag == "Destroy" && transform.tag == "TrafficAI") 
+        {
+            Destroy(gameObject);
         }
     }
     private void OnCollisionExit(Collision other)

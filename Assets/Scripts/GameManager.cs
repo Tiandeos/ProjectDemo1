@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
             }
             UpdateText();
         }
-        kph.text = CarController.speed.ToString("0");
+        //kph.text = CarController.speed.ToString("0");
         updateNeedle();
       
     }

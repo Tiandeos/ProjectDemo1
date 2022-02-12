@@ -12505,6 +12505,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5063122221462472969}
   - component: {fileID: 687104119159980834}
+  - component: {fileID: 42767476625454529}
+  - component: {fileID: 5808293369611375000}
+  - component: {fileID: 9060224878200554280}
   m_Layer: 0
   m_Name: Car3
   m_TagString: Untagged
@@ -12539,12 +12542,90 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 2100
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 989778750
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &42767476625454529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176373762431285795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98fa5edc7e7827d4a8c3a1e80a6c3db7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laneChangeType: 0
+  rigidBody: {fileID: 0}
+  IsChangingStrip: 0
+  IsCarTouching: 0
+  IsCarStoppedTouching: 0
+  CanUseNitro: 0
+  IsUsingNitro: 0
+  IsFinishedUsingNitro: 0
+  OnTouch: 0
+  CarID: 0
+  zCoordinate: 0
+  horizontalright: 0
+  maxspeed: 0
+  minspeed: 0
+  speed: 0
+  GearLevel: 0
+  lane: 0
+  topspeed: 220
+  gears:
+  - 60
+  - 120
+  - 150
+  - 220
+  StartMotorForce: 2000
+  breakForce: 1000
+  Grip: 0
+  MaxGearLevel: 3
+  gameManager: {fileID: 0}
+  carAIScript: []
+  inputManager: {fileID: 0}
+--- !u!114 &5808293369611375000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176373762431285795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60c408ae33f9d3d43a66557b66b69d12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RetryPanel: {fileID: 0}
+--- !u!114 &9060224878200554280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176373762431285795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3930cc7455bd9c84f981c0e164cfae2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NitroLevel: 0
+  EngineLevel: 0
+  TireLevel: 0
+  AeroDynamic: 0
+  EcuLevel: 0
+  SuspansionLevel: 0
+  TransMissionLevel: 0
+  boostForce: 0
+  StockNitro: 0
+  PlayerCarID: 0
+  camera: {fileID: 0}
 --- !u!1 &6876005519425498400
 GameObject:
   m_ObjectHideFlags: 0

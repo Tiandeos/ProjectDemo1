@@ -9,6 +9,8 @@ public class CarController : MonoBehaviour
         StrictLaneChange,
         FreeLaneChange
     }
+    private Animator animator;
+    private string currentstate = "Idle";
     public LaneChangeType laneChangeType;
     #region NotShowenOnEditor
     [HideInInspector] public Rigidbody rigidBody;
@@ -44,7 +46,7 @@ public class CarController : MonoBehaviour
     public float StartMotorForce = 1000;
     [SerializeField]private float breakForce = 1000;
     [SerializeField]private float Grip;
-    [SerializeField]private int MaxGearLevel = 4;
+    [SerializeField]public int MaxGearLevel = 4;
     private float maxsteerangle;
     private bool engineLerp;
     private float engineLerpValue;
@@ -86,6 +88,7 @@ public class CarController : MonoBehaviour
         wheeltransform[1] = wheeltransforms.transform.Find("1").gameObject;
         wheeltransform[2] = wheeltransforms.transform.Find("2").gameObject;
         wheeltransform[3] = wheeltransforms.transform.Find("3").gameObject;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         if(transform.tag == "Player") 
         {
             CanUseNitro = true;
@@ -93,9 +96,10 @@ public class CarController : MonoBehaviour
         gears[MaxGearLevel] = topspeed;
         if(laneChangeType == LaneChangeType.FreeLaneChange) 
         {
-            maxsteerangle = 30;
+            maxsteerangle = 1;
         }
         motorForce = StartMotorForce;
+        animator = GetComponent<Animator>();
     }
     private void Update()
     {  
@@ -117,6 +121,12 @@ public class CarController : MonoBehaviour
         }
         
     }
+    private void ChangeAnimationState(string newstate)
+    {
+        if(currentstate == newstate) return;
+        animator.Play(newstate);
+        currentstate = newstate;
+    }
     public void GetInput(float vertical,float horizontal) 
     {
         if(transform.tag == "Player") 
@@ -125,20 +135,40 @@ public class CarController : MonoBehaviour
             //verticalright = Input.GetAxis("Vertical");
             if(inputManager.UpPressed) 
             {
+                animator.SetBool("Gas",true);
+                animator.SetBool("CanBeFixedGas", false);
+                animator.SetBool("CanBeFixedBreak", false);
                 if(verticalright < 1)
                 {
                     verticalright += Time.deltaTime;
                 }
             }
+            else if(!inputManager.UpPressed && animator.GetBool("Break") != true)
+            {
+                animator.SetBool("Gas",false);
+                animator.SetBool("CanBeFixedGas", true);
+            }
+            else if(!inputManager.UpPressed)
+            {
+                verticalright = 0;
+            }
             if(inputManager.DownPressed) 
             {
-                if(verticalright > -1)  
-                {
-                    verticalright -= Time.deltaTime;
-                }
+                animator.SetBool("CanBeFixedGas", false);
+                animator.SetBool("CanBeFixedBreak", false);
+                animator.SetBool("Break",true);
+                animator.SetBool("Gas",false);
+                wheel[2].brakeTorque = breakForce;
+                wheel[3].brakeTorque = breakForce;
+            }
+            else if(!inputManager.DownPressed && animator.GetBool("Gas") != true)
+            {
+                animator.SetBool("Break",false);
+                animator.SetBool("Gas",false);
+                animator.SetBool("CanBeFixedBreak", true);
             }
         }
-        else if(transform.tag == "Opponent")
+        else
         {
             verticalright = vertical;
             horizontalright = horizontal;
@@ -151,10 +181,17 @@ public class CarController : MonoBehaviour
         //Vitesi artırma kodu max vitesten fazlaysa vites atmıyor bu kodu yakında farklı bir yere yaz. 
         if(transform.tag == "Player") 
         {
-            if(inputManager.GearUpgraded && GearLevel <= 3 && speed > maxspeed - 5 && !IsChangingStrip) 
+            if(inputManager.GearUpgraded && GearLevel <= MaxGearLevel && !IsChangingStrip) 
             {
                 inputManager.GearUpgraded = false;
                 ChangeGearLevel(true);
+                verticalright = 0;
+                gameManager.ChangeGear();
+            }
+            if(inputManager.GearDowngraded && GearLevel > 0) 
+            {
+                inputManager.GearDowngraded = false;
+                ChangeGearLevel(false);
                 verticalright = 0;
                 gameManager.ChangeGear();
             }
@@ -171,32 +208,47 @@ public class CarController : MonoBehaviour
             }
             else if(laneChangeType == LaneChangeType.FreeLaneChange) 
             {
-                float maxrotate;
-                maxrotate = 0.03f;
+                //Addforce yerine velocityi hatırlattığın için saol
                 //horizontalright = Input.GetAxis("Horizontal");
+                //Debug.Log("Current State: " + currentstate);
                 if(inputManager.RightPressed) 
                 {
-                    if(horizontalright < 1) 
-                    horizontalright += Time.deltaTime;
-                }
-                else if(inputManager.LeftPressed) 
-                {
-                    if(horizontalright > -1)
-                    horizontalright -= Time.deltaTime;
+                    LockPosition(true);
+                    animator.SetBool("Left",true);
+                    animator.SetBool("Right",false);
+                    animator.SetBool("CanBeFixedRight",false);
+                    animator.SetBool("CanBeFixedLeft",false);
+                    rigidBody.velocity = new Vector3(12,rigidBody.velocity.y,rigidBody.velocity.z); 
                     
                 }
-                if(transform.rotation.y > 0 && horizontalright > 0) {
-                    if(transform.rotation.y >= maxrotate) 
-                    {
-                        horizontalright = 0;
-                    }
-                }
-                else if(transform.rotation.y < 0 && horizontalright < 0) 
+                else if( !inputManager.RightPressed && animator.GetBool("Right") != true) 
                 {
-                    if(transform.rotation.y <= -maxrotate) 
-                    {
-                        horizontalright = 0;
-                    }
+                    animator.SetBool("CanBeFixedRight",true);
+                    animator.SetBool("Right",false);
+                    animator.SetBool("Left",false);
+                }
+               
+                if(inputManager.LeftPressed) 
+                {
+                    //rigidBody.AddForce(-75000,0,0);
+                    LockPosition(true);
+                    animator.SetBool("Right",true);
+                    animator.SetBool("Left",false);
+                    animator.SetBool("CanBeFixedLeft",false);
+                    animator.SetBool("CanBeFixedRight",false);
+                    rigidBody.velocity = new Vector3(-12,rigidBody.velocity.y,rigidBody.velocity.z);
+                    
+                }
+                else if(!inputManager.LeftPressed && animator.GetBool("Left") != true) 
+                {
+                    animator.SetBool("CanBeFixedLeft",true);
+                    animator.SetBool("Right",false);
+                    animator.SetBool("Left",false);
+                }
+               
+                if(!inputManager.LeftPressed && !inputManager.RightPressed) 
+                {
+                    LockPosition(false);
                 }
             }
             if(Input.GetKeyDown(KeyCode.Z) && CanUseNitro) 
@@ -204,8 +256,7 @@ public class CarController : MonoBehaviour
                 IsUsingNitro = true;
             }
         }
-        //Vitesi aşağı çekiyor
-        if(speed < minspeed && GearLevel > 1) 
+        if(speed < minspeed && GearLevel > 1 && transform.tag != "Player") 
         {
             ChangeGearLevel(false);
             if(transform.tag == "Player") 
@@ -213,6 +264,7 @@ public class CarController : MonoBehaviour
                 gameManager.ChangeGear();
             }
         }
+        //Vitesi aşağı çekiyor
         SteerFix();
     }
     private void SetEngineLerp(float num) 
@@ -503,19 +555,18 @@ public class CarController : MonoBehaviour
     {
         //Eğer şerit değiştirmiyorsa yana doğru hareketi engelliyor
         //Ve rotasyonu engelliyor.
-        if(!IsLocking && laneChangeType == LaneChangeType.StrictLaneChange) 
+        if(!IsLocking) 
         {
             rigidBody.constraints = RigidbodyConstraints.FreezePositionX;
         }
         else 
         {
             rigidBody.constraints = RigidbodyConstraints.None;
-            rigidBody.constraints = RigidbodyConstraints.FreezeRotationX;
         }
     }
     public void LockRotation(bool IsLocking) 
     {
-        if(!IsLocking && laneChangeType == LaneChangeType.StrictLaneChange) 
+        if(!IsLocking ) 
         {
             rigidBody.freezeRotation = true;
         }
@@ -552,18 +603,32 @@ public class CarController : MonoBehaviour
     }
     private void UpdateDrag() 
     {
-        if(verticalright != 0 && !IsChangingStrip) 
+        if(transform.tag == "Player") 
         {
-            rigidBody.drag = 0.01f;
+            if(!inputManager.UpPressed)
+            {
+                rigidBody.drag = 0.06f;
+            }
+            else
+            {
+                rigidBody.drag = 0.01f;
+            }
         }
-        else if(verticalright == 0 && !IsChangingStrip)
+        if(transform.tag != "Player") 
         {
-            rigidBody.drag = 0.1f;
+            if(verticalright != 0 && !IsChangingStrip) 
+            {
+                rigidBody.drag = 0.01f;
+            }
+            else if(verticalright == 0 && !IsChangingStrip)
+            {
+                rigidBody.drag = 0.1f;
+            }
         }
         else if(IsChangingStrip) 
         {
-            rigidBody.drag = 0.12f;
-        }
+            rigidBody.drag = 0.08f;
+        }   
         UpdateDragForSameLane(); 
     } 
     private void UpdateDragForSameLane() 
@@ -594,7 +659,7 @@ public class CarController : MonoBehaviour
     }
     private void UsingNitro() 
     {
-        if(IsUsingNitro) 
+        if(IsUsingNitro)
         {
             rigidBody.AddForce(transform.forward * upgrades.boostForce);
             upgrades.StockNitro--;
@@ -634,7 +699,7 @@ public class CarController : MonoBehaviour
     }
     private float CalculateCarSpeed() 
     {
-        float speed = rigidBody.velocity.magnitude;
+        float speed = rigidBody.velocity.z;
         speed *= 3.6f;
         if(speed > maxspeed) 
         {

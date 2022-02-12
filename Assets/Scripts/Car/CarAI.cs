@@ -47,13 +47,15 @@ public class CarAI : MonoBehaviour
     private void HandleMotorAI() 
     {
         #region Break
-        if(!IsBreaking) 
-        {
-            vertical = 1f;
-        }
-        else if(IsBreaking)
-        {
-            vertical = -1f;
+        if(transform.tag == "Opponent") {
+            if(!IsBreaking) 
+            {
+                vertical = 1f;
+            }
+            else if(IsBreaking)
+            {
+                vertical = -1f;
+            }
         }
         #endregion
         
@@ -61,7 +63,7 @@ public class CarAI : MonoBehaviour
         {
             CanTimerStart = true;
         }
-        if(carController.speed > carController.maxspeed && carController.GearLevel < 4 && CanChangeGear) 
+        if(carController.speed > carController.maxspeed && carController.GearLevel < carController.MaxGearLevel && CanChangeGear) 
         {
             CanChangeGear = false;
             CanTimerStart = false;
