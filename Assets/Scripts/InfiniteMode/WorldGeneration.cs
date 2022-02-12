@@ -17,9 +17,10 @@ public class WorldGeneration : MonoBehaviour
     int createdroads;
     private bool RandomNumberAttached = false;
     bool secondroad;
-    private int RandomRoad;
+    private int RandomRoad,RandomCreatedRoads;
     private void Start()
     {
+        RandomCreatedRoads = Random.Range(2,10);
         if(!RandomNumberAttached) 
         {
             RandomRoad = RandomNumberCreator();
@@ -32,6 +33,10 @@ public class WorldGeneration : MonoBehaviour
             CreateRoads();
             
         }
+        if(createdroads > RandomCreatedRoads) 
+        {
+            CreateTrafficCars();
+        }
     }
     private void Update()
     {
@@ -43,10 +48,14 @@ public class WorldGeneration : MonoBehaviour
         {
             CreateRoads();
             DestroyRoads();
-            if(createdroads > 5) 
+            if(createdroads > RandomCreatedRoads) 
             {
                 CreateTrafficCars();
             }
+        }
+        if(RandomCreatedRoads == 0) 
+        {
+            RandomCreatedRoads = Random.Range(2,10);
         }
     }
     private void CreateRoads(int prefabindex = -1)
@@ -101,12 +110,14 @@ public class WorldGeneration : MonoBehaviour
     }
     private void CreateTrafficCars() 
     {
+        RandomCreatedRoads = 0;
         Debug.Log("Spawnz:" + spawnz);
         //-16.25 = 0 -6.25 = 1 6.25 = 2 16.25 = 3
         createdroads = 0;
         GameObject go1;
         float x = 0;
-        for(int i = 0;i < 3;i++) 
+        int a2 = Random.Range(1,4);
+        for(int i = 0;i < a2;i++) 
         {
             int a = Random.Range(0,4);
             while(RandomNumbers.Contains(a)) 
@@ -129,8 +140,10 @@ public class WorldGeneration : MonoBehaviour
                 x = 15.25f;
                 break;
             }
+            int spawnzx =Random.Range(0,45);
             go1 = Instantiate(TrafficCars[0]) as GameObject;
-            go1.transform.position = new Vector3(x,0.8f,spawnz -62.5f);
+            go1.transform.position = new Vector3(x,0.8f,(spawnz - spawnzx) - 62.5f);
+            go1.tag = "TrafficAI";
             go1.AddComponent<TrafficAI>();
             ActiveCars.Add(go1);
         }

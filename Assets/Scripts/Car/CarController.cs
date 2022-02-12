@@ -171,6 +171,18 @@ public class CarController : MonoBehaviour
         else
         {
             verticalright = vertical;
+            if(verticalright > 1) 
+            {
+                animator.SetBool("Gas",true);
+                animator.SetBool("Break",false);
+            }
+            else if(verticalright < 0) 
+            {
+                animator.SetBool("Gas",false);
+                animator.SetBool("CanBeFixedGas",false);
+                animator.SetBool("Break",false);
+                
+            }
             horizontalright = horizontal;
         }
         if(rigidBody.velocity.z <= 5 && verticalright < 0) 
@@ -218,7 +230,10 @@ public class CarController : MonoBehaviour
                     animator.SetBool("Right",false);
                     animator.SetBool("CanBeFixedRight",false);
                     animator.SetBool("CanBeFixedLeft",false);
-                    rigidBody.velocity = new Vector3(12,rigidBody.velocity.y,rigidBody.velocity.z); 
+                    if(animator.GetCurrentAnimatorStateInfo(0).IsName("LeftIdle")) 
+                    {
+                        rigidBody.velocity = new Vector3(12,rigidBody.velocity.y,rigidBody.velocity.z);
+                    } 
                     
                 }
                 else if( !inputManager.RightPressed && animator.GetBool("Right") != true) 
@@ -236,7 +251,10 @@ public class CarController : MonoBehaviour
                     animator.SetBool("Left",false);
                     animator.SetBool("CanBeFixedLeft",false);
                     animator.SetBool("CanBeFixedRight",false);
-                    rigidBody.velocity = new Vector3(-12,rigidBody.velocity.y,rigidBody.velocity.z);
+                    if(animator.GetCurrentAnimatorStateInfo(0).IsName("RightIdle")) 
+                    {
+                        rigidBody.velocity = new Vector3(-12,rigidBody.velocity.y,rigidBody.velocity.z);
+                    }
                     
                 }
                 else if(!inputManager.LeftPressed && animator.GetBool("Left") != true) 

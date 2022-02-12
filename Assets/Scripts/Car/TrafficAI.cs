@@ -54,11 +54,11 @@ using UnityEngine;
         {
             if(!IsBreaking) 
             {
-                vertical = 0.45f;
+                vertical = 1;
             }
             else if(IsBreaking)
             {
-                vertical = -0.45f;
+                vertical = -1;
             }
             if(carController.speed > 70) 
             {
